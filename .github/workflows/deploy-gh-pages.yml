@@ -1,6 +1,7 @@
 # Sample workflow for building and deploying a Jekyll site to GitHub Pages
 name: Deploy page
 
+
 on:
   # Runs on pushes targeting the default branch
   pull_request: 
@@ -17,6 +18,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  pull-requests: write
 
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
@@ -32,6 +34,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Start Tracee profiling in background
+        uses: aquasecurity/tracee-action@b5ad0734366c98eca9f76bd7a9d27368f837e1e7
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Packaging Action
@@ -43,6 +47,11 @@ jobs:
           destination: ./_site      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
+      - name: Stop and Check Tracee results and create a PR
+        uses: aquasecurity/tracee-action@ce4a8e48ea62953976e7e10fcd83344bb85d132a
+        with:
+          create-pr: "true"
+          fail-on-diff: "false"
 
   # Deployment job
   deploy:

@@ -29,3 +29,5 @@ pids
 *.njsproj
 *.sln
 *.sw?
+
+.vscode/
